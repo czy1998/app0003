@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
+
 
 export default class jilu extends Component {
   render() {

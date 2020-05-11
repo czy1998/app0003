@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -23,11 +23,20 @@ import riji from '../views/xinli/rij';
 const Stack = createStackNavigator();
 function MyStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
+        },
+      }}>
       <Stack.Screen
         name="home"
         component={MyTabs}
-        options={{title: '养生小助手'}}
+        options={{title: '养生小助手',
+        headerRight:()=>(<TouchableOpacity onpress={() => alert('跳转失败')}>
+        <Image style={{ width: 36, height: 36, marginRight: 5}} source={require('../src/tixing.png')}/></TouchableOpacity>)}}
       />
       <Stack.Screen
         name="health"
@@ -100,15 +109,50 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="home"
       tabBarOptions={{
-        activeTintColor: 'tomato',
+        activeTintColor: 'red',
         inactiveTintColor: 'gray',
         tabStyle: {
-          backgroundColor: '#ddd',
-          paddingBottom: 15,
-          borderRightWidth: 1,
-          borderRightColor: '#fff',
+          borderRightWidth: 2,
+          borderRightColor: '#ddd',
         },
-      }}>
+      }}
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
+          if (route.name === 'me') {
+            if (focused) {
+              return (
+                <Image
+                  style={styles.tabBarIcon}
+                  source={require('../src/me-active.png')}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  style={styles.tabBarIcon}
+                  source={require('../src/me-inactive.png')}
+                />
+              );
+            }
+          } else if (route.name === 'home') {
+            if (focused) {
+              return (
+                <Image
+                  style={styles.tabBarIcon}
+                  source={require('../src/home-active.png')}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  style={styles.tabBarIcon}
+                  source={require('../src/home-inactive.png')}
+                />
+              );
+            }
+          }
+        },
+      })}>
       <Tab.Screen
         name="home"
         component={home}
@@ -135,3 +179,9 @@ export default class index extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  tabBarIcon: {
+    width: 21,
+    height: 21,
+  },
+});
