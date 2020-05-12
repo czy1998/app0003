@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  RefreshControl,
 } from 'react-native';
 import request from '../../common/request';
 import config from '../../common/config';
@@ -22,13 +23,14 @@ export default class qingdan extends Component {
     this.state = {
       data: [],
       isLoadingTail: false,
-      refreshing:false,
+      isRefreshing:false,
     };
-    // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
-    // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
+
     this.fetchData = this.fetchData.bind(this);
     this.fetchMoreData = this.fetchMoreData.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
+    this._onRefresh = this._onRefresh.bind(this);
+    
   }
 
   componentDidMount() {
@@ -37,9 +39,18 @@ export default class qingdan extends Component {
 
   fetchData(page) {
     let that = this;
-    this.setState({
-      isLoadingTail: true,
-    });
+
+    if(page!==0){
+      this.setState({
+        isLoadingTail: true,
+      });
+    }
+    else{
+      this.setState({
+        isRefreshing:true,
+      });
+    }
+    
 
     request
       .get(config.api.base + config.api.creations, {
@@ -50,21 +61,44 @@ export default class qingdan extends Component {
         if (data.success) {
           let items = catchedResults.items.slice();
 
-          items = items.concat(data.data);
+          if(page!==0){
+            items = items.concat(data.data);
+            catchedResults.nextPage += 1;
+          }
+          else{
+            items =data.data.concat(items);
+          }
+          
           catchedResults.items = items;
           catchedResults.total = data.total;
 
           setTimeout(function () {
-            that.setState({
-              data: that.state.data.concat(catchedResults.items),
-            });
+            if(page!==0){
+              that.setState({
+                isLoadingTail:false,
+                data: that.state.data.concat(catchedResults.items),
+              });
+            }
+            else{
+              that.setState({
+                isRefreshing:false,
+                data: that.state.data.concat(catchedResults.items),
+              });
+            }
           }, 20);
         }
       })
       .catch((error) => {
-        this.setState({
-          isLoadingTail: false,
-        });
+        if(page!==0){
+          this.setState({
+            isLoadingTail: false,
+          });
+        }
+        else{
+          this.setState({
+            isRefreshing: false,
+          });
+        }
       });
   }
   hasMore() {
@@ -78,6 +112,14 @@ export default class qingdan extends Component {
     let page = catchedResults.nextPage;
     this.fetchData(page);
   }
+  _onRefresh(){
+    if(!this.hasMore() || this.state.isRefreshing){
+      return
+    }
+
+    this.fetchData(0);
+  }
+
   renderFooter = () => (
     <View style={styles.loading}>
       <Text style={styles.loadingtext}>没有东西了…</Text>
@@ -94,14 +136,14 @@ export default class qingdan extends Component {
           data={this.state.data}
           renderItem={this.renderMovie}
           keyExtractor={(item) => item.id + item.name}
-          refreshing={this.state.refreshing}
-          onRefresh={() => {
-            this.setState({refreshing: true})
-            setTimeout(() => {
-              alert('没有可刷新的内容！');
-              this.setState({refreshing: false});
-            }, 3000);
-          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this._onRefresh}
+              tintColor='#ff6600'
+              title='拼命加载中...'
+            />
+          }
         />
       </View>
     );
@@ -123,8 +165,8 @@ export default class qingdan extends Component {
 
 const styles = StyleSheet.create({
   tupian: {
-    width: 70,
-    height: 70,
+    width: 100,
+    height: 100,
   },
   rightContainer: {
     flex: 1,
