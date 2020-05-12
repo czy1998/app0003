@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 export default class home extends Component {
   render() {
@@ -9,7 +12,7 @@ export default class home extends Component {
           欢迎使用健康小助手，在这里你可以培养出一个健康的生活习惯！
         </Text>
         <Image
-          style={{width: 410, height: 300}}
+          style={{width: screenWidth, height: 300}}
           source={require('../src/jk.png')}
         />
         <View
