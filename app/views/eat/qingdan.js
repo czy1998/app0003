@@ -85,7 +85,7 @@ export default class qingdan extends Component {
                 data: that.state.data.concat(catchedResults.items),
               });
             }
-          }, 20);
+          }, 0);
         }
       })
       .catch((error) => {

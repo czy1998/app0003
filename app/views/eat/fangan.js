@@ -26,7 +26,7 @@ class List extends Component {
   render() {
     let item=this.state.item
     return (
-      <TouchableOpacity style={{marginBottom: 2}}>
+      <TouchableOpacity onPress={this.props.onSelect} style={{marginBottom: 2}}>
         <View style={styles.yitiao}>
           <Image source={{uri: item.img}} style={styles.tupian} />
           <View style={styles.rightContainer}>
@@ -158,6 +158,15 @@ export default class qingdan extends Component {
     </View>
   );
 
+  loadPage(item){
+     this.props.navigation.navigate('neirong', {
+      YL:item.yuanliao,
+      ZF:item.zuofa,
+      NAME:item.name,
+      IMG:item.img,
+     })
+  }
+
   render() {
     return (
       <View>
@@ -167,7 +176,7 @@ export default class qingdan extends Component {
           onEndReachedThreshold={20}
           data={this.state.data}
           renderItem={this.renderMovie}
-          keyExtractor={(item) => item.id + item.name}
+          keyExtractor={(item) => item.id + item.img}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
@@ -181,7 +190,7 @@ export default class qingdan extends Component {
     );
   }
   renderMovie = ({item}) => {
-    return <List item={item} />
+    return <List key={item.id} onSelect={()=>this.loadPage(item)} item={item} />
   };
 }
 

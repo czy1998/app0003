@@ -16,6 +16,7 @@ import mubiao from '../views/health/mubiao';
 import fangan from '../views/eat/fangan';
 import jilu from '../views/eat/jilu';
 import jinji from '../views/eat/jinji';
+import neirong from '../views/eat/neirong';
 import qingdan from '../views/eat/qingdan';
 import kaixin from '../views/xinli/kaixin';
 import riji from '../views/xinli/rij';
@@ -98,6 +99,11 @@ function MyStack() {
         name="riji"
         component={riji}
         options={{title: '心情日记'}}
+      />
+      <Stack.Screen
+        name="neirong"
+        component={neirong}
+        options={{title: '详细信息'}}
       />
     </Stack.Navigator>
   );
