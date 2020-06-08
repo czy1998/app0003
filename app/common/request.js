@@ -1,4 +1,3 @@
-'use strict';
 import queryString from 'query-string';
 import _ from 'lodash';
 import config from './config';
@@ -15,7 +14,7 @@ request.get = function (url, parpms) {
 };
 
 request.post = function (url, body) {
-  var options = _.extend(config.header, {
+  let options = _.extend(config.header, {
     body: JSON.stringify({body}),
   });
   return fetch(url, options)

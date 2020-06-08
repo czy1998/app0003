@@ -1,58 +1,37 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {Text, View, Image, Dimensions} from 'react-native';
+import {  Button  } from 'react-native-elements';
 
+const screenWidth = Math.round(Dimensions.get('window').width);
 export default class health extends Component {
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor:'white'}}>
         <Image
-          style={{width: 410, height: 300}}
-          source={require('../src/ss.png')}
+          style={{width: screenWidth, height: 250, resizeMode:'contain', marginBottom: 80, marginTop:20}}
+          source={require('../src/eat.png')}
         />
         <View
           style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
             alignItems: 'center',
-            flex: 1,
           }}>
-          <TouchableOpacity
-            style={styles.button}
+            <Button 
+            titleStyle={{fontSize:40}}
+            type="outline"
+            title='饮食方案'
             onPress={() => this.props.navigation.navigate('fangan')}>
-            <Text style={styles.buttonText}>饮食方案</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
+          </Button>
+          <Text></Text>
+          <Text></Text>
+          <Text></Text>
+          <Button 
+            titleStyle={{fontSize:40}}
+            type="outline"
+            title='记录饮食'
             onPress={() => this.props.navigation.navigate('jilu')}>
-            <Text style={styles.buttonText}>记录饮食</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate('jinji')}>
-            <Text style={styles.buttonText}>禁忌搭配</Text>
-          </TouchableOpacity>
+          </Button>
         </View>
       </View>
     );
   }
 }
-const styles = StyleSheet.create({
-  button: {
-    width: 150,
-    height: 50,
-    marginTop: 40,
-    paddingHorizontal: 15,
-    paddingVertical: 6,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#ae9373',
-    backgroundColor: '#f5f5f5',
-  },
-  buttonText: {
-    color: '#ae9373',
-    fontSize: 20,
-    lineHeight: 40,
-    textAlign: 'center',
-  },
-});

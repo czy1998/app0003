@@ -1,75 +1,47 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { View,  Image, Dimensions } from 'react-native';
+import { Text, Button  } from 'react-native-elements';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
 
 export default class home extends Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <Text style={{paddingTop: 15}}>
-          欢迎使用健康小助手，在这里你可以培养出一个健康的生活习惯！
+      <View style={{backgroundColor:'white', flex:1}}>
+        <Text h3 style={{margin:5, paddingVertical: 15, paddingHorizontal: 10, }}>
+            欢迎使用健康小助手，在这里你可以培养出一个健康的生活习惯！
         </Text>
         <Image
-          style={{width: screenWidth, height: 300}}
+          style={{width: screenWidth-40, height: 300, resizeMode:"cover", borderRadius:30, marginLeft:15, borderWidth:1, borderColor:"#B0C4DE"}}
           source={require('../src/jk.png')}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            height: 80,
-          }}>
-          <TouchableOpacity
-            style={styles.button}
+        <View Style={{flexDirection: 'row' }}>
+          <Button 
+            buttonStyle={{borderRadius:10}}
+            containerStyle={{marginTop:10, marginHorizontal:20}}
+            titleStyle={{fontSize:40}}
+            type="outline"
+            title='1.健康档案'
             onPress={() => this.props.navigation.navigate('health')}>
-            <Text style={styles.buttonText}>健康档案</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
+          </Button>
+          <Button 
+            buttonStyle={{borderRadius:10}}
+            containerStyle={{marginTop:10, marginHorizontal:20}}
+            titleStyle={{fontSize:40}}
+            type="outline"
+            title='2.打卡记录'
+            onPress={() => this.props.navigation.navigate('message')}>
+          </Button>
+          <Button 
+            buttonStyle={{borderRadius:10}}
+            containerStyle={{marginTop:10, marginHorizontal:20}}
+            titleStyle={{fontSize:40}}
+            type="outline"
+            title='3.饮食记录'
             onPress={() => this.props.navigation.navigate('eat')}>
-            <Text style={styles.buttonText}>健康膳食</Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            height: 80,
-          }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate('xinli')}>
-            <Text style={styles.buttonText}>心理模块</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate('shenghuo')}>
-            <Text style={styles.buttonText}>生活技巧</Text>
-          </TouchableOpacity>
+          </Button>
         </View>
       </View>
     );
   }
 }
-const styles = StyleSheet.create({
-  button: {
-    width: 150,
-    height: 50,
-    marginTop: 40,
-    paddingHorizontal: 15,
-    paddingVertical: 6,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#ae9373',
-    backgroundColor: '#f5f5f5',
-  },
-  buttonText: {
-    color: '#ae9373',
-    fontSize: 20,
-    lineHeight: 40,
-    textAlign: 'center',
-  },
-});

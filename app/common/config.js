@@ -1,15 +1,14 @@
-'use strict'
-
 export default {
-    header:{
+  header: {
     method: 'POST',
     headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-        }
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    api: {
-        base:'http://rap2.taobao.org:38080/app/mock/253519/',
-        creations:'api/app003'
-    }
-}
+  },
+  api: {
+    base: 'http://rap2.taobao.org:38080/app/mock/253519/',
+    creations: 'api/app003',
+    first:'http://localhost:1234/u/',
+  },
+};

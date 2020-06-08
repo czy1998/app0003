@@ -8,8 +8,8 @@ export default class health extends Component {
     return (
       <View style={{flex: 1, backgroundColor:'white'}}>
         <Image
-          style={{width: screenWidth, height: 300, resizeMode:'cover', marginBottom: 40}}
-          source={require('../src/jilu.png')}
+          style={{width: screenWidth, height: 300, resizeMode:'contain', marginBottom: 40}}
+          source={require('../src/qiandao.png')}
         />
         <View
           style={{
@@ -18,8 +18,8 @@ export default class health extends Component {
             <Button 
             titleStyle={{fontSize:40}}
             type="outline"
-            title='基本信息'
-            onPress={() => this.props.navigation.navigate('xinxi')}>
+            title='签到打卡'
+            onPress={() => {this.props.navigation.navigate('qiandao')}}>
           </Button>
           <Text></Text>
           <Text></Text>
@@ -27,18 +27,9 @@ export default class health extends Component {
           <Button 
             titleStyle={{fontSize:40}}
             type="outline"
-            title='健康评估'
-            onPress={() => this.props.navigation.navigate('pinggu')}>
+            title='统计数据'
+            onPress={() => this.props.navigation.navigate('shuju')}>
           </Button>
-          {/*
-          <Button 
-            Style={{}}
-            titleStyle={{fontSize:40}}
-            type="outline"
-            title='设定目标'
-            onPress={() => this.props.navigation.navigate('mubiao')}>
-          </Button>
-          */}
         </View>
       </View>
     );

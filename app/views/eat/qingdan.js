@@ -6,203 +6,91 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  RefreshControl,
 } from 'react-native';
-import request from '../../common/request';
-import config from '../../common/config';
 
-let catchedResults = {
-  nextPage: 1,
-  items: [],
-  total: 0,
-};
 
-export default class qingdan extends Component {
+export default class fangan extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      isLoadingTail: false,
-      isRefreshing:false,
+      data:[],
+      loaded: false
     };
-
-    this.fetchData = this.fetchData.bind(this);
-    this.fetchMoreData = this.fetchMoreData.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
-    this._onRefresh = this._onRefresh.bind(this);
-    
   }
-
+  
   componentDidMount() {
-    this.fetchData(1);
+    this.fetchData();
+    console.log('接收数据成功')
+    console.log(this.state.data)
   }
 
-  fetchData(page) {
-    let that = this;
-
-    if(page!==0){
-      this.setState({
-        isLoadingTail: true,
-      });
-    }
-    else{
-      this.setState({
-        isRefreshing:true,
-      });
-    }
-    
-
-    request
-      .get(config.api.base + config.api.creations, {
-        accessToken: 'abcde',
-        page: page,
-      })
-      .then((data) => {
-        if (data.success) {
-          let items = catchedResults.items.slice();
-
-          if(page!==0){
-            items = items.concat(data.data);
-            catchedResults.nextPage += 1;
-          }
-          else{
-            items =data.data.concat(items);
-          }
-          
-          catchedResults.items = items;
-          catchedResults.total = data.total;
-
-          setTimeout(function () {
-            if(page!==0){
-              that.setState({
-                isLoadingTail:false,
-                data: that.state.data.concat(catchedResults.items),
-              });
-            }
-            else{
-              that.setState({
-                isRefreshing:false,
-                data: that.state.data.concat(catchedResults.items),
-              });
-            }
-          }, 0);
-        }
-      })
-      .catch((error) => {
-        if(page!==0){
-          this.setState({
-            isLoadingTail: false,
-          });
-        }
-        else{
-          this.setState({
-            isRefreshing: false,
-          });
-        }
+  fetchData=()=>{
+    fetch('http://192.168.1.2:1234/u/foodlist')
+      .then(response => response.json())
+      .then(responseData => {
+        this.setState({
+          data: this.state.data.concat(responseData.data),
+          loaded: true
+        });
       });
   }
-  hasMore() {
-    return catchedResults.items.length !== catchedResults.total;
-  }
+//进入详情页面
+  loadPage(item){
+    fetch('http://192.168.1.2:1234/u/jilu', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: item.name,
+      }),
+    });
+ }
 
-  fetchMoreData() {
-    if (!this.hasMore() || this.state.isLoadingTail) {
-      return;
-    }
-    let page = catchedResults.nextPage;
-    this.fetchData(page);
-  }
-  _onRefresh(){
-    if(!this.hasMore() || this.state.isRefreshing){
-      return
-    }
-
-    this.fetchData(0);
-  }
-
-  renderFooter = () => (
-    <View style={styles.loading}>
-      <Text style={styles.loadingtext}>没有东西了…</Text>
-    </View>
-  );
-
-  render() {
-    return (
-      <View>
-        <FlatList
-          onEndReached={this.fetchMoreData}
-          ListFooterComponent={this.renderFooter}
-          onEndReachedThreshold={20}
-          data={this.state.data}
-          renderItem={this.renderMovie}
-          keyExtractor={(item) => item.id + item.name}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.isRefreshing}
-              onRefresh={this._onRefresh}
-              tintColor='#ff6600'
-              title='拼命加载中...'
-            />
-          }
-        />
-      </View>
-    );
-  }
-  renderMovie = ({item}) => {
-    return (
-      <TouchableOpacity style={{marginBottom: 2}}>
-        <View style={styles.yitiao}>
-          <Image source={{uri: item.img}} style={styles.tupian} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.biaoti}>{item.name}</Text>
-            <Text style={styles.tianjia}>添加</Text>
+  renderItem=({item})=>{
+    return(
+      <TouchableOpacity onPress={()=>this.loadPage(item)} style={{marginBottom: 2}}>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', padding:10, }}>
+          <Image source={{uri: item.img}} style={{width: 120, height: 120, borderRadius:30, borderColor:'#e9e9dd', borderWidth:1}} />
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            <Text style={{color: '#515151', fontSize: 25}}>{item.name}</Text>
           </View>
         </View>
       </TouchableOpacity>
-    );
-  };
-}
+    )
+  }
 
+  renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <Text>Loading foods...</Text>
+      </View>
+    );
+  }
+
+  render() {
+    if (!this.state.loaded) {
+      console.log('1')
+      return this.renderLoadingView();
+    }
+    return (
+      console.log(this.state.data),
+      <FlatList
+          data={this.state.data}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => `${item} - ${index}`}
+        />
+    )
+  }
+}
 const styles = StyleSheet.create({
-  tupian: {
-    width: 100,
-    height: 100,
-  },
-  rightContainer: {
+  container: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  biaoti: {
-    color: '#ae9373',
-    fontSize: 20,
-  },
-  tianjia: {
-    color: '#ae9373',
-    fontSize: 20,
-    marginRight: 10,
-  },
-  yitiao: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  loadingtext: {
-    color: '#777',
-    textAlign: 'center',
-  },
-  loading: {
-    marginVertical: 20,
-  },
-});
-/* height: 50,
-paddingHorizontal: 15,
-paddingVertical: 6,
-borderStyle: 'solid',
-borderWidth: 1,
-borderRadius: 8,
-borderColor: '#ae9373',
-backgroundColor: '#f5f5f5',
-marginBottom: 6,*/
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
+  }
+})

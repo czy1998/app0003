@@ -21,12 +21,10 @@ export default class fangan extends Component {
   
   componentDidMount() {
     this.fetchData();
-    console.log('接收数据成功')
-    console.log(this.state.data)
   }
 
   fetchData=()=>{
-    fetch('http://192.168.1.2:1234/u/list')
+    fetch('http://192.168.1.2:1234/u/see')
       .then(response => response.json())
       .then(responseData => {
         this.setState({
@@ -35,24 +33,14 @@ export default class fangan extends Component {
         });
       });
   }
-//进入详情页面
-  loadPage(item){
-    this.props.navigation.navigate('neirong', {
-      name:item.name,
-      nutrition:item.nutrition,
-      cook_method:item.cook_method,
-      cook_list:item.cook_list,
-      img:item.img,
-    })
- }
 
   renderItem=({item})=>{
     return(
-      <TouchableOpacity  onPress={()=>this.loadPage(item)} style={{marginBottom: 2}}>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', padding:10, }}>
-          <Image source={{uri: item.img}} style={{width: 120, height: 120, borderRadius:30}} />
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-            <Text style={{color: '#515151', fontSize: 30}}>{item.name}</Text>
+      <TouchableOpacity  style={{marginBottom: 2}}>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white'}}>
+          <View style={{}}>
+    <Text style={{color: '#515151', fontSize: 20, marginLeft:20, marginVertical:10}}>名称：{''}{item.name}</Text>
+    <Text style={{color: '#515151', fontSize: 20, marginLeft:20, marginBottom:5}}>添加时间：{''}{item.creatAt}</Text>
           </View>
         </View>
       </TouchableOpacity>
