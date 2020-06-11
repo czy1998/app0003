@@ -85,7 +85,7 @@ export default class denglu extends Component {
       <View style={{backgroundColor:'#fff', flex:1}}>
         <Image
           style={{width: screenWidth-40, height: 300, resizeMode: 'contain', margin:20,  borderRadius:30}}
-          source={require('../../src/signup.png')}
+          source={require('../../src/signup.jpg')}
         />
         <View style={{marginHorizontal:30, paddingVertical:20}}>
           <View style={styles.view1}>

@@ -13,7 +13,7 @@ export default class home extends Component {
         </Text>
         <Image
           style={{width: screenWidth-40, height: 300, resizeMode:"cover", borderRadius:30, marginLeft:15, borderWidth:1, borderColor:"#B0C4DE"}}
-          source={require('../src/jk.png')}
+          source={require('../src/jk.jpg')}
         />
         <View Style={{flexDirection: 'row' }}>
           <Button 

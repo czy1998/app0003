@@ -9,7 +9,7 @@ export default class health extends Component {
       <View style={{flex: 1, backgroundColor:'white'}}>
         <Image
           style={{width: screenWidth, height: 300, resizeMode:'contain', marginBottom: 40}}
-          source={require('../src/qiandao.png')}
+          source={require('../src/qiandao.jpg')}
         />
         <View
           style={{

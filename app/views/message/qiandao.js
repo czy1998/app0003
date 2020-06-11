@@ -38,7 +38,7 @@ export default class pinggu extends Component {
       <View style={{flex:1, backgroundColor:'white'}}>
           <Image
           style={{width: screenWidth, height: 300, resizeMode:"cover"}}
-          source={require('../../src/daka.png')}
+          source={require('../../src/daka.jpg')}
         />
         <View>
         <View style={styles.view1}>
